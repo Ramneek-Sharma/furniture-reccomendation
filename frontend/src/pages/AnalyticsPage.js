@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getAnalytics } from '../services/api';
 
 const AnalyticsPage = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -8,8 +7,58 @@ const AnalyticsPage = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const data = await getAnalytics();
-        setAnalytics(data);
+        // Demo data - replace with actual API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const demoAnalytics = {
+          total_products: 312,
+          categories: {
+            'Home & Kitchen': 98,
+            'Furniture': 76,
+            'Storage & Organization': 54,
+            'Patio, Lawn & Garden': 42,
+            'Home Decor': 32,
+            'Office Products': 10
+          },
+          brands: {
+            'GOYMFK': 15,
+            'subrtex': 12,
+            'MUYETOL': 10,
+            'VEWETOL': 8,
+            'JOIN IRON Store': 7,
+            'Other Brands': 260
+          },
+          price_ranges: {
+            '$0-$25': 89,
+            '$25-$50': 78,
+            '$50-$100': 69,
+            '$100-$200': 54,
+            '$200+': 22
+          },
+          materials: {
+            'Metal': 45,
+            'Wood': 38,
+            'Plastic': 32,
+            'Fabric': 28,
+            'Glass': 15,
+            'Other': 154
+          },
+          colors: {
+            'Black': 42,
+            'White': 38,
+            'Brown': 35,
+            'Gray': 28,
+            'Blue': 22,
+            'Other': 147
+          },
+          statistics: {
+            avg_price: 87.45,
+            median_price: 49.99,
+            products_with_price: 215
+          }
+        };
+        
+        setAnalytics(demoAnalytics);
       } catch (error) {
         console.error('Error fetching analytics:', error);
       } finally {
@@ -38,7 +87,7 @@ const AnalyticsPage = () => {
           <p>Total Products</p>
         </div>
         <div className="stat-card">
-          <h3>${analytics.avg_price?.toFixed(2)}</h3>
+          <h3>${analytics.statistics?.avg_price?.toFixed(2)}</h3>
           <p>Average Price</p>
         </div>
         <div className="stat-card">
@@ -75,7 +124,7 @@ const AnalyticsPage = () => {
           <div className="chart">
             {Object.entries(analytics.price_ranges || {}).map(([range, count]) => (
               <div key={range} className="bar-item">
-                <span className="bar-label">${range}</span>
+                <span className="bar-label">{range}</span>
                 <div className="bar">
                   <div 
                     className="bar-fill" 

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { chatWithAI } from '../services/api';
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([
@@ -26,16 +25,40 @@ const ChatPage = () => {
 
     const userMessage = { type: 'user', content: input, products: [] };
     setMessages(prev => [...prev, userMessage]);
+    
+    const currentInput = input;
     setInput('');
     setLoading(true);
 
     try {
-      const response = await chatWithAI(input);
+      // Demo response - replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const demoProducts = [
+        {
+          uniq_id: '1',
+          title: 'Modern Ergonomic Chair',
+          price: '$299',
+          main_category: 'Furniture',
+          brand: 'ComfortCorp',
+          images: "['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400']"
+        },
+        {
+          uniq_id: '2', 
+          title: 'Coffee Table Set',
+          price: '$199',
+          main_category: 'Furniture',
+          brand: 'ModernHome',
+          images: "['https://images.unsplash.com/photo-1549497538-303791108f95?w=400']"
+        }
+      ];
+
       const aiMessage = {
         type: 'ai',
-        content: response.ai_response,
-        products: response.recommended_products || []
+        content: `Great choice! For "${currentInput}", I recommend these products. They offer excellent quality and style for your needs.`,
+        products: demoProducts
       };
+      
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       const errorMessage = {
@@ -59,9 +82,9 @@ const ChatPage = () => {
   const getImageUrl = (imagesString) => {
     try {
       const images = JSON.parse(imagesString.replace(/'/g, '"'));
-      return images[0] || '/placeholder.jpg';
+      return images[0] || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400';
     } catch {
-      return '/placeholder.jpg';
+      return 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400';
     }
   };
 
@@ -95,10 +118,11 @@ const ChatPage = () => {
                         src={getImageUrl(product.images)}
                         alt={product.title}
                         className="product-image"
+                        onError={(e) => {e.target.src = 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400'}}
                       />
                       <div className="product-info">
                         <h5 className="product-title">{product.title}</h5>
-                        <p className="product-price">${product.price}</p>
+                        <p className="product-price">{product.price}</p>
                         <span className="product-category">{product.main_category}</span>
                       </div>
                     </div>
